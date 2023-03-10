@@ -1,6 +1,7 @@
 -- * Shotcuts
 local opt = vim.opt
 local g = vim.g
+local pywal = require('pywal')
 
 -- * Editor Options 
 
@@ -10,21 +11,18 @@ opt.relativenumber = true -- Reletive Numbers
 opt.numberwidth = 4 -- Numbers Width
 
 -- ** Indent to Spaces
-opt.tabstop = 4 -- Space Width
+opt.tabstop = 2 -- Space Width
+opt.shiftwidth = 2
 opt.expandtab = true -- Use Spaces insted of Indent
+opt.smartindent = true
 
 -- ** ColorScheme
 opt.termguicolors = true -- set termguicolors to enable highlight groups
+pywal.setup()
 
 -- ** Disable Ntree
 g.loaded_netrw       = 1
 g.loaded_netrwPlugin = 1
-
--- Sets The ColorScheme to Nord and Makes The Background Color Solid
-vim.cmd([[
-colorscheme nord 
-highlight Normal ctermbg=0
-]])
 
 -- * Plugin Settings
 
@@ -47,27 +45,45 @@ require("nvim-tree").setup({
   },
 })
 
--- ** Hardline
-require('hardline').setup {
-  bufferline = false,  -- disable bufferline
-  bufferline_settings = {
-    exclude_terminal = false,  -- don't show terminal buffers in bufferline
-    show_index = false,        -- show buffer indexes (not the actual buffer numbers) in bufferline
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'pywal-nvim',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
   },
-  theme = 'nord',   -- change theme
-  sections = {         -- define sections
-    {class = 'mode', item = require('hardline.parts.mode').get_item},
-    {class = 'high', item = require('hardline.parts.git').get_item, hide = 100},
-    {class = 'med', item = require('hardline.parts.filename').get_item},
-    '%<',
-    {class = 'med', item = '%='},
-    {class = 'low', item = require('hardline.parts.wordcount').get_item, hide = 100},
-    {class = 'error', item = require('hardline.parts.lsp').get_error},
-    {class = 'warning', item = require('hardline.parts.lsp').get_warning},
-    {class = 'warning', item = require('hardline.parts.whitespace').get_item},
-    {class = 'high', item = require('hardline.parts.filetype').get_item, hide = 60},
-    {class = 'mode', item = require('hardline.parts.line').get_item},
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {'filename'},
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
   },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
 }
 
 vim.cmd([[

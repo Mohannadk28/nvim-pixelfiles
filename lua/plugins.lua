@@ -8,8 +8,9 @@ return require('packer').startup(function(use)
   use 'neovim/nvim-lspconfig' -- Configurations for Nvim LSP
 
   -- Nord Theme
-  use 'arcticicestudio/nord-vim'
-  use {'ojroques/nvim-hardline'}
+  use { 'AlphaTechnolog/pywal.nvim', as = 'pywal' }
+
+  use { 'nvim-lualine/lualine.nvim', requires = { 'kyazdani42/nvim-web-devicons', opt = true } }
 
   -- Nvim-Tree
   use {
@@ -19,6 +20,8 @@ return require('packer').startup(function(use)
    },
    tag = 'nightly' -- optional, updated every week. (see issue #1193)
   }
+
+  use 'fatih/vim-go'
 
   -- Treesitter
   use {
@@ -32,6 +35,14 @@ return require('packer').startup(function(use)
    requires = { {'nvim-lua/plenary.nvim'} }
   }
   
+  use {
+    "startup-nvim/startup.nvim",
+    requires = {"nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim"},
+    config = function()
+      require"startup".setup({theme = "dashboard"})
+    end
+  }
+
   use 'ap/vim-css-color' -- Vim-CSS-Color
   use 'habamax/vim-godot' -- Vim-Godot
   use 'wuelnerdotexe/vim-astro' --Vim-Astro
